@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+## [1.0.0] - 01/11/2019
 
-* TODO: Describe initial release.
+* Hide or show bottom navigation bar while scrolling
