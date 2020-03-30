@@ -1,7 +1,6 @@
 name: scroll_bottom_navigation_bar
 description: Hide or show bottom navigation bar while scrolling
 version: 1.0.0
-author: Edson Onildo <inbox.edsononildo@gmail.com>
 homepage: https://github.com/EdsonOnildoJR/scroll_bottom_navigation_bar
 
 environment:
