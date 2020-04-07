@@ -46,8 +46,8 @@ Scaffold(
 
 ### Example
 
-See a [complete example](./example).
+See a [complete example](./example/lib/main.dart).
 
-## Snapshots
+## Snapshot
 
 <img src="./snapshots/snapshot.gif" with="200"/>
