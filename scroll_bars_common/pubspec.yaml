@@ -1,8 +1,8 @@
 name: scroll_bars_common
 description: A common package to scroll bars packages
-version: 0.0.1
+version: 0.1.0
 author: Edson Onildo <inbox.edsononildo@gmail.com>
-homepage: https://github.com/EdsonOnildoJR/scroll_bars
+homepage: https://github.com/EdsonOnildoJR/scroll_bars_common
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
