@@ -17,6 +17,7 @@ class ScrollAppBar extends StatelessWidget with PreferredSizeWidget {
     this.elevation,
     this.shape,
     this.backgroundColor,
+    this.backgroundGradient,
     this.brightness,
     this.iconTheme,
     this.actionsIconTheme,
@@ -39,6 +40,7 @@ class ScrollAppBar extends StatelessWidget with PreferredSizeWidget {
   final PreferredSizeWidget bottom;
   final double elevation;
   final Color backgroundColor;
+  final Gradient backgroundGradient;
   final Brightness brightness;
   final IconThemeData iconTheme;
   final IconThemeData actionsIconTheme;
@@ -60,8 +62,8 @@ class ScrollAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: actions,
       flexibleSpace: flexibleSpace,
       bottom: bottom,
-      elevation: elevation,
-      backgroundColor: backgroundColor,
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
       brightness: brightness,
       iconTheme: iconTheme,
       actionsIconTheme: actionsIconTheme,
@@ -75,7 +77,7 @@ class ScrollAppBar extends StatelessWidget with PreferredSizeWidget {
       shape: shape,
     );
 
-    final color = appBar.backgroundColor ??
+    final color = backgroundColor ??
         Theme.of(context).appBarTheme.color ??
         Theme.of(context).primaryColor;
 
@@ -89,14 +91,22 @@ class ScrollAppBar extends StatelessWidget with PreferredSizeWidget {
 
         return Transform.translate(
           offset: Offset(0.0, -height.data),
-          child: Container(
+          child: Material(
+            elevation:
+                elevation ?? Theme.of(context).appBarTheme.elevation ?? 4.0,
+            child: Container(
               height: scrollAppBarController.height,
-              color: color,
+              decoration: BoxDecoration(
+                color: color,
+                gradient: backgroundGradient,
+              ),
               child: Opacity(
                 opacity: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn)
                     .transform(1.0 - opacity),
                 child: appBar,
-              )),
+              ),
+            ),
+          ),
         );
       },
     );
