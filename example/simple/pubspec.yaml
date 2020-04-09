@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   scroll_bottom_navigation_bar:
-    path: ../../
+    path: ../..
 
 
   # The following adds the Cupertino Icons font to your application.

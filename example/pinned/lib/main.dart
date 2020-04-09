@@ -17,7 +17,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     _scrollBottomNavigationBarController = ScrollBottomNavigationBarController()
-      ..stream.listen(onTap);
+      ..pages.listen(onTap);
   }
 
   @override
@@ -31,7 +31,8 @@ class _AppState extends State<App> {
     return MaterialApp(
       home: Scaffold(
         body: ScrollBody(
-          controller: _scrollBottomNavigationBarController,
+          scrollBottomNavigationBarController:
+              _scrollBottomNavigationBarController,
           builder: (context, index) => Container(
             height: MediaQuery.of(context).size.height +
                 (kBottomNavigationBarHeight * 2),
@@ -41,7 +42,8 @@ class _AppState extends State<App> {
           ),
         ),
         bottomNavigationBar: ScrollBottomNavigationBar(
-          controller: _scrollBottomNavigationBarController,
+          scrollBottomNavigationBarController:
+              _scrollBottomNavigationBarController,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.mood),

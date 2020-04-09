@@ -17,7 +17,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     _scrollBottomNavigationBarController = ScrollBottomNavigationBarController()
-      ..stream.listen(onTap);
+      ..pages.listen(onTap);
   }
 
   @override
@@ -36,7 +36,8 @@ class _AppState extends State<App> {
           title: Text("ScrollBottomNavigationBar"),
         ),
         body: ScrollBody(
-          controller: _scrollBottomNavigationBarController,
+          scrollBottomNavigationBarController:
+              _scrollBottomNavigationBarController,
           autoAtachScrollController: false,
           builder: (context, index) => PageView.builder(
             key: UniqueKey(),
@@ -55,7 +56,8 @@ class _AppState extends State<App> {
           ),
         ),
         bottomNavigationBar: ScrollBottomNavigationBar(
-          controller: _scrollBottomNavigationBarController,
+          scrollBottomNavigationBarController:
+              _scrollBottomNavigationBarController,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.mood),

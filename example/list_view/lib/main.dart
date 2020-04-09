@@ -31,7 +31,8 @@ class _AppState extends State<App> {
     return MaterialApp(
       home: Scaffold(
         body: ScrollBody(
-          controller: _scrollBottomNavigationBarController,
+          scrollBottomNavigationBarController:
+              _scrollBottomNavigationBarController,
           builder: (context, index) => ListView(
             shrinkWrap: true,
             physics: ScrollPhysics(),
@@ -47,7 +48,8 @@ class _AppState extends State<App> {
           ),
         ),
         bottomNavigationBar: ScrollBottomNavigationBar(
-          controller: _scrollBottomNavigationBarController,
+          scrollBottomNavigationBarController:
+              _scrollBottomNavigationBarController,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.mood),
