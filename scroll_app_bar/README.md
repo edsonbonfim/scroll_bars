@@ -8,9 +8,13 @@ This package has the same result of default way that use a custom scroll view wi
 
 So, why I should use this package?
 
-Because de default way don't works well in all cases. For example, if you have page views and  list views inside of the pages.
+Because default way don't works well in all cases. For example, if you have page views and  list views inside of the pages.
 
 This package grant you more control and you can use this in more cases. Also, you can use this widget in a scaffold app bar, that turns your code more simple.
+
+**PLUS:**
+  * You can use a gradient background! 😊
+  * You can pin/unpin app bar
 
 ## Usage
 
@@ -23,7 +27,7 @@ Add `scroll_app_bar` package to your project. You can do this following [this st
 First, you need a `ScrollAppBarController` instance. If you need a custom `ScrollController`, you can pass the instance on constructor.
 
 ```dart
-final scrollAppBarController = ScrollAppBarController(); 
+final controller = ScrollAppBarController(); 
 ```
 
 Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and atach `ScrollController` instance in your scrollable widget on body.
@@ -31,23 +35,25 @@ Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and atach `Sc
 > **_NOTE:_**  Showing only essencial code. See [example](#example) section to a complete implementation.
 
 ```dart
-Scaffold(
-  extendBodyBehindAppBar: true,
-  appBar: ScrollAppBar(
-    scrollAppBarController: scrollAppBarController,
-    ...
-  ),
-  body: ListView.builder(
-    controller: scrollAppBarController.scrollController, 
-    ...
-  ),
-)
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: ScrollAppBar(
+      scrollAppBarController: controller,
+      title: Text("App Bar"),
+    ),
+    body: ListView.builder(
+      controller: controller.scrollController,
+      itemBuilder: _listBuildItem,
+    ),
+  );
+}
 ```
 
 ### Example
 
 See a [complete example](./example/lib/main.dart).
 
-## Snapshot
+## Snapshots
 
-<img src="./snapshots/snapshot.gif" with="200"/>
+![snapshot](./snapshots/snapshot.gif)

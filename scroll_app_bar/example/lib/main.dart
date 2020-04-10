@@ -16,32 +16,32 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  ScrollAppBarController scrollAppBarController;
+  ScrollAppBarController controller;
 
   @override
   void initState() {
     super.initState();
-    scrollAppBarController = ScrollAppBarController();
+    controller = ScrollAppBarController();
   }
 
   @override
   void dispose() {
-    scrollAppBarController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: ScrollAppBar(
-        scrollAppBarController: scrollAppBarController,
+        scrollAppBarController: controller,
         title: Text("App Bar"),
       ),
       body: ListView.builder(
-        controller: scrollAppBarController.scrollController,
+        controller: controller.scrollController,
         itemBuilder: _listBuildItem,
       ),
+      floatingActionButton: _pin,
     );
   }
 
@@ -50,6 +50,13 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(vertical: 50),
       color: Color(Random().nextInt(0xffffffff)),
       child: Center(child: Text("$index")),
+    );
+  }
+
+  Widget get _pin {
+    return FloatingActionButton(
+      onPressed: () => controller.tooglePin(),
+      child: Icon(Icons.touch_app),
     );
   }
 }

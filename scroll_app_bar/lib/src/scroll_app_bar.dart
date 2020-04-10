@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import 'scroll_app_bar_controller.dart';
 
-class ScrollAppBar extends StatelessWidget with PreferredSizeWidget {
+class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
   ScrollAppBar({
     Key key,
     @required this.scrollAppBarController,
@@ -54,64 +52,116 @@ class ScrollAppBar extends StatelessWidget with PreferredSizeWidget {
   final double toolbarOpacity;
 
   @override
-  Widget build(BuildContext context) {
-    final appBar = AppBar(
-      leading: leading,
-      automaticallyImplyLeading: automaticallyImplyLeading,
-      title: title,
-      actions: actions,
-      flexibleSpace: flexibleSpace,
-      bottom: bottom,
+  _ScrollAppBarState createState() => _ScrollAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _ScrollAppBarState extends State<ScrollAppBar> {
+  Widget appBar;
+  double elevation;
+  Color backgroundColor;
+
+  @override
+  void initState() {
+    super.initState();
+
+    appBar = AppBar(
+      leading: widget.leading,
+      automaticallyImplyLeading: widget.automaticallyImplyLeading,
+      title: widget.title,
+      actions: widget.actions,
+      flexibleSpace: widget.flexibleSpace,
+      bottom: widget.bottom,
       elevation: 0.0,
       backgroundColor: Colors.transparent,
-      brightness: brightness,
-      iconTheme: iconTheme,
-      actionsIconTheme: actionsIconTheme,
-      textTheme: textTheme,
-      primary: primary,
-      centerTitle: centerTitle,
-      excludeHeaderSemantics: excludeHeaderSemantics,
-      titleSpacing: titleSpacing,
-      bottomOpacity: bottomOpacity,
-      toolbarOpacity: toolbarOpacity,
-      shape: shape,
-    );
-
-    final color = backgroundColor ??
-        Theme.of(context).appBarTheme.color ??
-        Theme.of(context).primaryColor;
-
-    return StreamBuilder<double>(
-      stream: scrollAppBarController.heightStream,
-      builder: (BuildContext context, AsyncSnapshot<double> height) {
-        if (!height.hasData) return appBar;
-
-        double opacity =
-            (height.data / scrollAppBarController.height).clamp(0.0, 1.0);
-
-        return Transform.translate(
-          offset: Offset(0.0, -height.data),
-          child: Material(
-            elevation:
-                elevation ?? Theme.of(context).appBarTheme.elevation ?? 4.0,
-            child: Container(
-              height: scrollAppBarController.height,
-              decoration: BoxDecoration(
-                color: color,
-                gradient: backgroundGradient,
-              ),
-              child: Opacity(
-                opacity: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn)
-                    .transform(1.0 - opacity),
-                child: appBar,
-              ),
-            ),
-          ),
-        );
-      },
+      brightness: widget.brightness,
+      iconTheme: widget.iconTheme,
+      actionsIconTheme: widget.actionsIconTheme,
+      textTheme: widget.textTheme,
+      primary: widget.primary,
+      centerTitle: widget.centerTitle,
+      excludeHeaderSemantics: widget.excludeHeaderSemantics,
+      titleSpacing: widget.titleSpacing,
+      bottomOpacity: widget.bottomOpacity,
+      toolbarOpacity: widget.toolbarOpacity,
+      shape: widget.shape,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Widget build(BuildContext context) {
+    backgroundColor = widget.backgroundColor ??
+        Theme.of(context).appBarTheme.color ??
+        Theme.of(context).primaryColor;
+
+    elevation =
+        widget.elevation ?? Theme.of(context).appBarTheme.elevation ?? 4.0;
+
+    return StreamBuilder<bool>(
+      stream: widget.scrollAppBarController.pinStream,
+      builder: _pinBuilder,
+    );
+  }
+
+  Widget _pinBuilder(
+    BuildContext context,
+    AsyncSnapshot<bool> pinSnapshot,
+  ) {
+    if (!pinSnapshot.hasData || pinSnapshot.data) {
+      return _elevation(1.0);
+    }
+    return StreamBuilder(
+      stream: widget.scrollAppBarController.heightFactorStream,
+      builder: _heightFactorBuilder,
+    );
+  }
+
+  Widget _heightFactorBuilder(
+    BuildContext context,
+    AsyncSnapshot<double> heightFactorSnapshot,
+  ) {
+    if (!heightFactorSnapshot.hasData) {
+      return _elevation(1.0);
+    }
+    return _align(heightFactorSnapshot.data);
+  }
+
+  Widget _align(double heightFactor) {
+    return Align(
+      alignment: Alignment(0, 1),
+      heightFactor: heightFactor,
+      child: _elevation(heightFactor),
+    );
+  }
+
+  Widget _elevation(double heightFactor) {
+    return Material(
+      elevation: elevation,
+      child: _decoratedContainer(heightFactor),
+    );
+  }
+
+  Widget _decoratedContainer(double heightFactor) {
+    return Container(
+      height: widget.scrollAppBarController.height,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        gradient: widget.backgroundGradient,
+      ),
+      child: _opacity(heightFactor),
+    );
+  }
+
+  Widget _opacity(double heightFactor) {
+    return Opacity(
+      opacity: Interval(
+        0.5,
+        1.0,
+        curve: Curves.fastOutSlowIn,
+      ).transform(heightFactor),
+      child: appBar,
+    );
+  }
 }
