@@ -16,12 +16,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   ScrollBottomNavigationBarController controller;
 
   @override
   void initState() {
     super.initState();
     controller = ScrollBottomNavigationBarController()..pageListener(onTap);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   scaffoldKey.currentState.showSnackBar(SnackBar(
+    //     content: Text("Snackbar support"),
+    //     duration: Duration(hours: Duration.hoursPerDay),
+    //     action: SnackBarAction(
+    //       label: "CLOSE",
+    //       onPressed: () => scaffoldKey.currentState.hideCurrentSnackBar(),
+    //     ),
+    //   ));
+    // });
   }
 
   @override
@@ -33,6 +44,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       body: ScrollBody(
         scrollBottomNavigationBarController: controller,
         autoAttachScrollController: false,
@@ -47,7 +59,7 @@ class _HomeState extends State<Home> {
         scrollBottomNavigationBarController: controller,
         items: items,
       ),
-      floatingActionButton: pin,
+      // floatingActionButton: pin,
     );
   }
 

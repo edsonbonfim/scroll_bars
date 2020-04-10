@@ -5,8 +5,10 @@ import 'package:rxdart/rxdart.dart';
 import 'package:scroll_bars_common/scroll_bars_common.dart';
 
 class ScrollBottomNavigationBarController extends ScrollBarsController {
-  ScrollBottomNavigationBarController({ScrollController scrollController})
-      : super(scrollController: scrollController);
+  ScrollBottomNavigationBarController({
+    ScrollController scrollController,
+    bool snap = true,
+  }) : super(scrollController: scrollController, snap: snap);
 
   @override
   double height = kBottomNavigationBarHeight;
