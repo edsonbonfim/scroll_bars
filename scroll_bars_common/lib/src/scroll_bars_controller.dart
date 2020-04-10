@@ -1,14 +1,14 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class ScrollBarsController {
-  ScrollBarsController({this.scrollController}) {
+  ScrollBarsController({this.scrollController, bool snap = true}) {
+    _snap = snap;
     (scrollController ??= ScrollController()).addListener(_scrollListener);
   }
 
+  bool _snap;
   double get height;
-
   ScrollController scrollController;
 
   // ==========================================
@@ -22,6 +22,8 @@ abstract class ScrollBarsController {
   double _delta = 0.0, _oldOffset = 0.0;
 
   void _scrollListener() {
+    setSnapState(snap);
+
     ScrollPosition position = scrollController.position;
     double pixels = position.pixels;
 
@@ -46,6 +48,32 @@ abstract class ScrollBarsController {
     _heightFactor$.add(1.0 - _delta / height);
   }
 
+  void _isScrollingNotifier() {
+    if (scrollController.position.isScrollingNotifier.value) return;
+
+    double limit = (1.0 - _delta / height).roundToDouble();
+
+    if (_heightFactor$.stream.value == limit) return;
+
+    _heightFactor$.add(limit);
+  }
+
+  bool get snap => _snap;
+
+  void toogleSnap() => setSnapState(!_snap);
+
+  void setSnapState(bool snap) {
+    _snap = snap;
+    if (_snap) {
+      if (scrollController.position.isScrollingNotifier.hasListeners) return;
+      scrollController.position.isScrollingNotifier
+          .addListener(_isScrollingNotifier);
+    } else {
+      scrollController.position.isScrollingNotifier
+          .removeListener(_isScrollingNotifier);
+    }
+  }
+
   // ==========================================
   // pin$
   // ==========================================
@@ -67,5 +95,8 @@ abstract class ScrollBarsController {
   void dispose() {
     _pin$.close();
     _heightFactor$.close();
+    scrollController.position.isScrollingNotifier
+        ?.removeListener(_isScrollingNotifier);
+    scrollController.position.isScrollingNotifier?.dispose();
   }
 }

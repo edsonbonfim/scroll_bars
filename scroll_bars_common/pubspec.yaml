@@ -1,6 +1,6 @@
 name: scroll_bars_common
 description: A common package to scroll bars packages. This package is not intended for direct use.
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/EdsonOnildoJR/scroll_bars_common
 
 environment:
