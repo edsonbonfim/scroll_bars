@@ -1,67 +1,81 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
 
-void main() {
-  runApp(App());
-}
+void main() => runApp(App());
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   @override
-  _AppState createState() => _AppState();
+  Widget build(BuildContext context) => MaterialApp(home: Home());
 }
 
-class _AppState extends State<App> {
-  ScrollBottomNavigationBarController _scrollBottomNavigationBarController;
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  ScrollBottomNavigationBarController controller;
 
   @override
   void initState() {
     super.initState();
-    _scrollBottomNavigationBarController = ScrollBottomNavigationBarController()
-      ..stream.listen(onTap);
+    controller = ScrollBottomNavigationBarController()..pageListener(onTap);
   }
 
   @override
   void dispose() {
-    _scrollBottomNavigationBarController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: ScrollBody(
-          scrollBottomNavigationBarController:
-              _scrollBottomNavigationBarController,
-          builder: (context, index) => ListView(
-            shrinkWrap: true,
-            physics: ScrollPhysics(),
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height +
-                    (kBottomNavigationBarHeight * 2),
-                child: Center(
-                  child: Text("ListView $index"),
-                ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: ScrollBottomNavigationBar(
-          scrollBottomNavigationBarController:
-              _scrollBottomNavigationBarController,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mood),
-              title: Text("One"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mood),
-              title: Text("Two"),
-            ),
-          ],
+    return Scaffold(
+      body: ScrollBody(
+        scrollBottomNavigationBarController: controller,
+        autoAttachScrollController: false,
+        builder: (context, index) => ListView.builder(
+          shrinkWrap: true,
+          physics: ScrollPhysics(),
+          controller: controller.scrollController,
+          itemBuilder: container,
         ),
       ),
+      bottomNavigationBar: ScrollBottomNavigationBar(
+        scrollBottomNavigationBarController: controller,
+        items: items,
+      ),
+      floatingActionButton: pin,
+    );
+  }
+
+  List<BottomNavigationBarItem> get items {
+    return <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        title: Text("Home"),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings),
+        title: Text("Settings"),
+      ),
+    ];
+  }
+
+  Widget container(BuildContext context, int index) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 50),
+      color: Color(Random().nextInt(0xffffffff)),
+      child: Center(child: Text("$index")),
+    );
+  }
+
+  Widget get pin {
+    return FloatingActionButton(
+      onPressed: () => controller.tooglePin(),
+      child: Icon(Icons.touch_app),
     );
   }
 

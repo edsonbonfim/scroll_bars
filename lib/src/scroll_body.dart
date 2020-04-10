@@ -7,28 +7,31 @@ class ScrollBody extends StatelessWidget {
     Key key,
     @required this.scrollBottomNavigationBarController,
     @required this.builder,
-    this.autoAtachScrollController = true,
+    this.autoAttachScrollController = true,
   }) : super(key: key);
 
   final ScrollBottomNavigationBarController scrollBottomNavigationBarController;
   final Widget Function(BuildContext context, int index) builder;
-  final bool autoAtachScrollController;
+  final bool autoAttachScrollController;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<int>(
       stream: scrollBottomNavigationBarController.pageStream,
-      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-        if (!snapshot.hasData) return builder(context, 0);
-        if (autoAtachScrollController) {
-          return SingleChildScrollView(
-            controller: scrollBottomNavigationBarController.scrollController,
-            child: builder(context, snapshot.data),
-          );
-        } else {
-          return builder(context, snapshot.data);
-        }
-      },
+      builder: _pageBuilder,
+    );
+  }
+
+  Widget _pageBuilder(BuildContext context, AsyncSnapshot<int> pageSnapshot) {
+    return autoAttachScrollController
+        ? _attach(context, pageSnapshot?.data ?? 0)
+        : builder(context, pageSnapshot?.data ?? 0);
+  }
+
+  Widget _attach(BuildContext context, int index) {
+    return SingleChildScrollView(
+      controller: scrollBottomNavigationBarController.scrollController,
+      child: builder(context, index),
     );
   }
 }

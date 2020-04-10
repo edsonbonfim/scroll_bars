@@ -22,11 +22,6 @@ class ScrollBottomNavigationBar extends StatefulWidget {
   final bool showSelectedLabels;
   final bool showUnselectedLabels;
 
-  @Deprecated(
-    "ScrollBottomNavigationBar.setPinState method should been used instead",
-  )
-  final bool pinned;
-
   ScrollBottomNavigationBar({
     Key key,
     @required this.scrollBottomNavigationBarController,
@@ -47,7 +42,6 @@ class ScrollBottomNavigationBar extends StatefulWidget {
     this.unselectedLabelStyle,
     this.showSelectedLabels = true,
     this.showUnselectedLabels,
-    this.pinned = false,
   })  : assert(scrollBottomNavigationBarController != null),
         super(key: key);
 
@@ -59,12 +53,6 @@ class ScrollBottomNavigationBar extends StatefulWidget {
 class _ScrollBottomNavigationBarState extends State<ScrollBottomNavigationBar> {
   Widget bottomNavigationBar;
   Color backgroundColor;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.scrollBottomNavigationBarController.setPinState(widget.pinned);
-  }
 
   @override
   Widget build(BuildContext context) {

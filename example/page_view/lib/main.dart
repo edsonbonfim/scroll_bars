@@ -1,75 +1,91 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
 
-void main() {
-  runApp(App());
-}
+void main() => runApp(App());
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   @override
-  _AppState createState() => _AppState();
+  Widget build(BuildContext context) => MaterialApp(home: Home());
 }
 
-class _AppState extends State<App> {
-  ScrollBottomNavigationBarController _scrollBottomNavigationBarController;
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  ScrollBottomNavigationBarController controller;
 
   @override
   void initState() {
     super.initState();
-    _scrollBottomNavigationBarController = ScrollBottomNavigationBarController()
-      ..pages.listen(onTap);
+    controller = ScrollBottomNavigationBarController()..pageListener(onTap);
   }
 
   @override
   void dispose() {
-    _scrollBottomNavigationBarController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      home: Scaffold(
-        extendBody: true,
-        appBar: AppBar(
-          title: Text("ScrollBottomNavigationBar"),
-        ),
-        body: ScrollBody(
-          scrollBottomNavigationBarController:
-              _scrollBottomNavigationBarController,
-          autoAtachScrollController: false,
-          builder: (context, index) => PageView.builder(
-            key: UniqueKey(),
-            itemBuilder: (context, page) => SingleChildScrollView(
-              padding: EdgeInsets.zero,
-              controller: _scrollBottomNavigationBarController.scrollController,
-              child: Container(
-                height: MediaQuery.of(context).size.height +
-                    kBottomNavigationBarHeight -
-                    kToolbarHeight,
-                child: Center(
-                  child: Text("PageView $index: $page"),
-                ),
-              ),
-            ),
-          ),
-        ),
-        bottomNavigationBar: ScrollBottomNavigationBar(
-          scrollBottomNavigationBarController:
-              _scrollBottomNavigationBarController,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mood),
-              title: Text("One"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mood),
-              title: Text("Two"),
-            ),
+    return Scaffold(
+      body: ScrollBody(
+        scrollBottomNavigationBarController: controller,
+        autoAttachScrollController: false,
+        builder: (_, __) => PageView.builder(itemBuilder: pageBuilder),
+      ),
+      bottomNavigationBar: ScrollBottomNavigationBar(
+        scrollBottomNavigationBarController: controller,
+        items: items,
+      ),
+    );
+  }
+
+  List<BottomNavigationBarItem> get items {
+    return <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.home),
+        title: Text("Home"),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings),
+        title: Text("Settings"),
+      ),
+    ];
+  }
+
+  Widget pageBuilder(BuildContext context, int index) {
+    return SingleChildScrollView(
+      controller: controller.scrollController,
+      child: container(index),
+    );
+  }
+
+  Widget container(int index) {
+    return Container(
+      height: MediaQuery.of(context).size.height + kBottomNavigationBarHeight,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(Random().nextInt(0xffffffff)),
+            Color(Random().nextInt(0xffffffff)),
           ],
         ),
       ),
+      child: Center(child: Text("Page $index")),
+    );
+  }
+
+  Widget get pin {
+    return FloatingActionButton(
+      onPressed: () => controller.tooglePin(),
+      child: Icon(Icons.touch_app),
     );
   }
 
