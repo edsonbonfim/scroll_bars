@@ -1,72 +1,47 @@
-ScrollBottomNavigationBar
-=========================
+# ScrollBottomNavigationBar
 
-Hide or show bottom navigation bar while scrolling
+Hide or show bottom navigation bar while scrolling.
 
-Getting Started
----------------
+## Usage
 
-First, add this line in your project's `pubspec.yaml`
+### Getting started
 
-```yaml
-dependencies:
-  ...
-  scroll_bottom_navigation_bar:
-```
-For help getting started with Flutter, view the online [documentation](https://flutter.io/).
-
-Usage Examples
---------------
+Add `scroll_bottom_navigation_bar` package to your project. You can do this following [this steps](https://pub.dev/packages/scroll_bottom_navigation_bar#-installing-tab-).
 
 ### Basic implementation
 
+First, you need a `ScrollBottomNavigationBarController` instance. If you need a custom `ScrollController`, you can pass the instance on constructor.
+
 ```dart
-import 'package:flutter/material.dart';
-import 'package:scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
+final controller = ScrollBottomNavigationBarController(); 
+```
 
-void main() {
-  runApp(App());
-}
+Now, you can use the `ScrollBottomNavigationBar` widget in a `Scaffold` widget, and atach `ScrollController` instance in your scrollable widget on body.
 
-class App extends StatelessWidget {
-  final controller = ScrollBottomNavigationBarController();
+For simplify your code, you can use the `ScrollBody` widget as yout scrollable widget. This widget takes care of exchanging items from the bottom bar.
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: ScrollBody(
-          controller: controller,
-          builder: (context, index) => Container(
-            height:
-                MediaQuery.of(context).size.height + kBottomNavigationBarHeight,
-            child: Center(
-              child: Text("Simple $index"),
-            ),
-          ),
-        ),
-        bottomNavigationBar: ScrollBottomNavigationBar(
-          controller: controller,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mood),
-              title: Text("One"),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mood),
-              title: Text("Two"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+> **_NOTE:_**  Showing only essencial code. See [example](#example) section to a complete implementation.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: ScrollBody(
+      scrollBottomNavigationBarController: controller,
+      builder: (context, index) => container(index),
+    ),
+    bottomNavigationBar: ScrollBottomNavigationBar(
+      scrollBottomNavigationBarController: controller,
+      items: items,
+    ),
+  );
 }
 ```
 
+### Example
+
 You can also check the [example](./example) for additional information.
 
-Snapshots
----------
+## Snapshots
 
 ![snapshot](./screenshots/page_view.gif)
