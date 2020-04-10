@@ -1,6 +1,6 @@
 name: scroll_bottom_navigation_bar
 description: This package allow hide or show bottom navigation bar while scrolling
-version: 2.1.0
+version: 2.1.0+1
 homepage: https://github.com/EdsonOnildoJR/scroll_bottom_navigation_bar
 
 environment:

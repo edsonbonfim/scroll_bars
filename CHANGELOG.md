@@ -1,7 +1,10 @@
+## [2.1.0+1] - April 10, 2020
+* Fix documentation.
+
 ## [2.1.0] - April 10, 2020
 * Added snap/unsnap option.
 
-* ## [2.0.0] - April 10, 2020
+## [2.0.0] - April 10, 2020
 * Supports FAB.
 * Supports snack bars.
 * Improve more performance.

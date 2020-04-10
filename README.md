@@ -8,7 +8,7 @@ This is currently our roadmap, please feel free to request additions/changes.
 
 | Feature                       | Progress |
 | :---------------------------- | :------: |
-| Scrobbable                    |    ✅     |
+| Scrollable                    |    ✅     |
 | Supports FAB                  |    ✅     |
 | Supports Snackbar             |    ✅     |
 | Gradient background           |    ✅     |
