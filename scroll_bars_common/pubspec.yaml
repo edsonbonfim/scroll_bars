@@ -1,6 +1,6 @@
 name: scroll_bars_common
-description: A common package to scroll bars packages
-version: 0.1.0
+description: A common package to scroll bars packages. This package is not intended for direct use.
+version: 1.0.0
 author: Edson Onildo <inbox.edsononildo@gmail.com>
 homepage: https://github.com/EdsonOnildoJR/scroll_bars_common
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  rxdart: ^0.23.1
+  rxdart: 0.23.1
 
 dev_dependencies:
   flutter_test:
