@@ -1,3 +1,6 @@
+## [0.2.0+1] - April 09, 2020
+* Fix pub issues.
+
 ## [0.2.0] - April 09, 2020
 * Added pin/unpin option.
 * Change scroll_bars_common version.

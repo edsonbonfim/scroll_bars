@@ -22,7 +22,6 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
     this.textTheme,
     this.primary = true,
     this.centerTitle,
-    this.excludeHeaderSemantics = false,
     this.titleSpacing = NavigationToolbar.kMiddleSpacing,
     this.toolbarOpacity = 1.0,
     this.bottomOpacity = 1.0,
@@ -45,7 +44,6 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
   final TextTheme textTheme;
   final bool primary;
   final bool centerTitle;
-  final bool excludeHeaderSemantics;
   final double titleSpacing;
   final ShapeBorder shape;
   final double bottomOpacity;
@@ -82,7 +80,6 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
       textTheme: widget.textTheme,
       primary: widget.primary,
       centerTitle: widget.centerTitle,
-      excludeHeaderSemantics: widget.excludeHeaderSemantics,
       titleSpacing: widget.titleSpacing,
       bottomOpacity: widget.bottomOpacity,
       toolbarOpacity: widget.toolbarOpacity,

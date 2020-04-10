@@ -1,4 +1,4 @@
-# Scroll app bar
+# ScrollAppBar
 
 Hide or show app bar while scrolling. This package works without custom scroll views and slivers.
 
