@@ -1,29 +1,78 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:rxdart/rxdart.dart';
 
-abstract class ScrollBarsController {
-  ScrollBarsController({this.scrollController, bool snap = true}) {
-    _snap = snap;
-    (scrollController ??= ScrollController()).addListener(_scrollListener);
+class Snap extends StatelessWidget {
+  final ScrollBarsController controller;
+  final Widget child;
+
+  const Snap({
+    Key key,
+    this.controller,
+    @required this.child,
+  })  : assert(controller != null),
+        assert(child != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return NotificationListener<UserScrollNotification>(
+      onNotification: _onNotification,
+      child: child,
+    );
   }
 
-  bool _snap;
+  bool _onNotification(UserScrollNotification notification) {
+    if (notification.direction == ScrollDirection.idle) {
+      if ([0.0, 1.0].contains(controller._heightFactor)) {
+        return true;
+      }
+
+      final offset = controller._heightFactor.round() == 1
+          ? -controller._delta
+          : controller.height - controller._delta;
+
+      controller.scrollController.animateTo(
+        controller.scrollController.offset + offset,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.linear,
+      );
+    }
+    return true;
+  }
+}
+
+abstract class ScrollBarsController {
+  ScrollBarsController(this.scrollController)
+      : assert(scrollController != null) {
+    scrollController.addListener(_scrollListener);
+  }
+
+  /// Height of the bar
   double get height;
+
+  /// Scroll controller
   ScrollController scrollController;
 
-  // ==========================================
-  // heightFactory$
-  // ==========================================
+  /// Notifier of the visible height factor of bar
+  final heightNotifier = ValueNotifier<double>(1.0);
 
-  final _heightFactor$ = BehaviorSubject<double>.seeded(1.0);
+  /// Notifier of the pin state changes
+  final pinNotifier = ValueNotifier<bool>(false);
 
-  Stream<double> get heightFactorStream => _heightFactor$.stream;
+  /// Returns [true] if the bar is pinned or [false] if the bar is not pinned
+  bool get isPinned => pinNotifier.value;
+
+  /// Set a new pin state
+  void setPinState(bool state) => pinNotifier.value = state;
+
+  /// Toogle the pin state
+  void tooglePinState() => setPinState(!pinNotifier.value);
 
   double _delta = 0.0, _oldOffset = 0.0;
 
-  void _scrollListener() {
-    setSnapState(snap);
+  double get _heightFactor => 1.0 - (_delta / height);
 
+  void _scrollListener() {
     ScrollPosition position = scrollController.position;
     double pixels = position.pixels;
 
@@ -32,71 +81,27 @@ abstract class ScrollBarsController {
 
     if (position.axisDirection == AxisDirection.down &&
         position.extentAfter == 0.0) {
-      if (_heightFactor$.stream.value == 0.0) return;
-      return _heightFactor$.add(0.0);
+      if (heightNotifier.value == 0.0) return;
+      heightNotifier.value = 0.0;
+      return;
     }
 
     if (position.axisDirection == AxisDirection.up &&
         position.extentBefore == 0.0) {
-      if (_heightFactor$.stream.value == 1.0) return;
-      return _heightFactor$.add(1.0);
+      if (heightNotifier.value == 1.0) return;
+      heightNotifier.value = 1.0;
+      return;
     }
 
-    if ((_delta == 0.0 && _heightFactor$.stream.value == 0.0) ||
-        (_delta == height && _heightFactor$.stream.value == 1.0)) return;
+    if ((_delta == 0.0 && heightNotifier.value == 0.0) ||
+        (_delta == height && heightNotifier.value == 1.0)) return;
 
-    _heightFactor$.add(1.0 - _delta / height);
+    heightNotifier.value = _heightFactor;
   }
 
-  void _isScrollingNotifier() {
-    if (scrollController.position.isScrollingNotifier.value) return;
-
-    double limit = (1.0 - _delta / height).roundToDouble();
-
-    if (_heightFactor$.stream.value == limit) return;
-
-    _heightFactor$.add(limit);
-  }
-
-  bool get snap => _snap;
-
-  void toogleSnap() => setSnapState(!_snap);
-
-  void setSnapState(bool snap) {
-    _snap = snap;
-    if (_snap) {
-      if (scrollController.position.isScrollingNotifier.hasListeners) return;
-      scrollController.position.isScrollingNotifier
-          .addListener(_isScrollingNotifier);
-    } else {
-      scrollController.position.isScrollingNotifier
-          .removeListener(_isScrollingNotifier);
-    }
-  }
-
-  // ==========================================
-  // pin$
-  // ==========================================
-
-  final _pin$ = BehaviorSubject<bool>.seeded(false);
-
-  Stream<bool> get pinStream => _pin$.stream;
-
-  bool get isPinned => _pin$.value;
-
-  void setPinState(bool pin) => _pin$.add(pin);
-
-  void tooglePin() => setPinState(!_pin$.value);
-
-  // ==========================================
-  // Dispose
-  // ==========================================
-
+  /// Discards resources
   void dispose() {
-    _pin$.close();
-    _heightFactor$.close();
-    scrollController.position.isScrollingNotifier
-        ?.removeListener(_isScrollingNotifier);
-    scrollController.position.isScrollingNotifier?.dispose();
+    pinNotifier.dispose();
+    heightNotifier.dispose();
   }
 }
