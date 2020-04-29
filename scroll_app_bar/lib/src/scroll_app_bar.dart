@@ -5,7 +5,7 @@ import 'scroll_app_bar_controller.dart';
 class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
   ScrollAppBar({
     Key key,
-    @required this.scrollAppBarController,
+    @required this.controller,
     this.leading,
     this.automaticallyImplyLeading = true,
     this.title,
@@ -20,15 +20,14 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
     this.iconTheme,
     this.actionsIconTheme,
     this.textTheme,
-    this.primary = true,
     this.centerTitle,
     this.titleSpacing = NavigationToolbar.kMiddleSpacing,
     this.toolbarOpacity = 1.0,
     this.bottomOpacity = 1.0,
-  })  : assert(scrollAppBarController != null),
+  })  : assert(controller != null),
         super(key: key);
 
-  final ScrollAppBarController scrollAppBarController;
+  final ScrollController controller;
   final Widget leading;
   final bool automaticallyImplyLeading;
   final Widget title;
@@ -42,7 +41,6 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
   final IconThemeData iconTheme;
   final IconThemeData actionsIconTheme;
   final TextTheme textTheme;
-  final bool primary;
   final bool centerTitle;
   final double titleSpacing;
   final ShapeBorder shape;
@@ -78,7 +76,6 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
       iconTheme: widget.iconTheme,
       actionsIconTheme: widget.actionsIconTheme,
       textTheme: widget.textTheme,
-      primary: widget.primary,
       centerTitle: widget.centerTitle,
       titleSpacing: widget.titleSpacing,
       bottomOpacity: widget.bottomOpacity,
@@ -96,33 +93,23 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
     elevation =
         widget.elevation ?? Theme.of(context).appBarTheme.elevation ?? 4.0;
 
-    return StreamBuilder<bool>(
-      stream: widget.scrollAppBarController.pinStream,
-      builder: _pinBuilder,
+    return ValueListenableBuilder<bool>(
+      valueListenable: widget.controller.appBar.pinNotifier,
+      builder: _pin,
     );
   }
 
-  Widget _pinBuilder(
-    BuildContext context,
-    AsyncSnapshot<bool> pinSnapshot,
-  ) {
-    if (!pinSnapshot.hasData || pinSnapshot.data) {
-      return _elevation(1.0);
-    }
-    return StreamBuilder(
-      stream: widget.scrollAppBarController.heightFactorStream,
-      builder: _heightFactorBuilder,
+  Widget _pin(BuildContext context, bool isPinned, Widget child) {
+    if (isPinned) return _align(1.0);
+
+    return ValueListenableBuilder<double>(
+      valueListenable: widget.controller.appBar.heightNotifier,
+      builder: _height,
     );
   }
 
-  Widget _heightFactorBuilder(
-    BuildContext context,
-    AsyncSnapshot<double> heightFactorSnapshot,
-  ) {
-    if (!heightFactorSnapshot.hasData) {
-      return _elevation(1.0);
-    }
-    return _align(heightFactorSnapshot.data);
+  Widget _height(BuildContext context, double height, Widget child) {
+    return _align(height);
   }
 
   Widget _align(double heightFactor) {
@@ -142,7 +129,7 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
 
   Widget _decoratedContainer(double heightFactor) {
     return Container(
-      height: widget.scrollAppBarController.height,
+      height: widget.controller.appBar.height,
       decoration: BoxDecoration(
         color: backgroundColor,
         gradient: widget.backgroundGradient,

@@ -1,20 +1,21 @@
 # ScrollAppBar
 
-Hide or show app bar while scrolling. This package works without custom scroll views and slivers.
+Hide or show app bar while scrolling. This package works without custom scroll views and slivers. So, you can use this widget in a scaffold app bar, that turns your code more simple.
 
-## Why this package?
+Simple scroll | Snap behavior
+:-----------: | :-----------:
+<img width="497" alt="n1" src="https://user-images.githubusercontent.com/8020047/80651941-3f757a80-8a4d-11ea-973e-c623423d0fad.gif"> | <img width="497" alt="n2" src="https://user-images.githubusercontent.com/8020047/80651979-5ddb7600-8a4d-11ea-87ef-b18ee534a574.gif">
 
-This package has the same result of default way that use a custom scroll view widget with a floating sliver app bar.
+## Roadmap
 
-So, why I should use this package?
+This is currently our roadmap, **please feel free to request additions/changes**.
 
-Because default way don't works well in all cases. For example, if you have page views and  list views inside of the pages.
-
-This package grant you more control and you can use this in more cases. Also, you can use this widget in a scaffold app bar, that turns your code more simple.
-
-**PLUS:**
-  * You can use a gradient background! 😊
-  * You can pin/unpin app bar
+| Feature             | Progress |
+| ------------------- | :------: |
+| Simple scroll       |    ✅     |
+| Snap behavior       |    ✅     |
+| Pin/unpin           |    ✅     |
+| Gradient background |    ✅     |
 
 ## Usage
 
@@ -24,27 +25,50 @@ Add `scroll_app_bar` package to your project. You can do this following [this st
 
 ### Basic implementation
 
-First, you need a `ScrollAppBarController` instance. If you need a custom `ScrollController`, you can pass the instance on constructor.
+First, you need a `ScrollController` instance.
 
 ```dart
-final controller = ScrollAppBarController(); 
+final controller = ScrollController(); 
 ```
 
-Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and atach `ScrollController` instance in your scrollable widget on body.
+Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and atach `ScrollController` instance in your scrollable main widget.
 
 > **_NOTE:_**  Showing only essencial code. See [example](#example) section to a complete implementation.
 
 ```dart
 @override
 Widget build(BuildContext context) {
-  return Scaffold(
+  Scaffold(
     appBar: ScrollAppBar(
-      scrollAppBarController: controller,
+      controller: controller,
       title: Text("App Bar"),
     ),
     body: ListView.builder(
-      controller: controller.scrollController,
-      itemBuilder: _listBuildItem,
+      controller: controller,
+      itemBuilder: ...,
+    ),
+  );
+}
+```
+
+### Snap behavior
+
+To enable the snap behavior, you need just wrap the main scrollable widget with a `Snap` widget and attach controller.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  Scaffold(
+    appBar: ScrollAppBar(
+      controller: controller,
+      title: Text("App Bar"),
+    ),
+    body: Snap(
+      controller: controller.appBar,
+      child: ListView.builder(
+        controller: controller,
+        itemBuilder: ...,
+      ),
     ),
   );
 }
@@ -54,6 +78,44 @@ Widget build(BuildContext context) {
 
 See a [complete example](./example/lib/main.dart).
 
-## Snapshots
+## API Reference
 
-![snapshot](./snapshots/snapshot.gif)
+```dart
+// Returns the total height of the bar
+controller.appBar.height;
+
+// Notifier of the visible height factor of bar
+controller.appBar.heightNotifier;
+
+// Notifier of the pin state changes
+controller.appBar.isPinned;
+
+// Returns [true] if the bar is pinned or [false] if the bar is not pinned
+controller.appBar.pinNotifier;
+
+// Set a new pin state
+controller.appBar.setPinState(state);
+
+// Toogle the pin state
+controller.appBar.tooglePinState();
+
+// Discards resource
+controller.appBar.dispose();
+```
+
+## Change log
+
+Please see [CHANGELOG](./CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please send feature requests and bugs at the issue tracker.
+
+## Credits
+
+- [Edson Onildo](https://github.com/EdsonOnildoJR)
+- [All Contributors](../../contributors)
+
+## License
+
+BSD 3-Clause License. Please see [License File](./LICENSE) for more information.
