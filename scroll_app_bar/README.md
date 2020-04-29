@@ -1,6 +1,6 @@
 # ScrollAppBar
 
-Hide or show app bar while scrolling. This package works without custom scroll views and slivers. So, you can use this widget in a scaffold app bar, that turns your code more simple.
+Hide or show app bar while scrolling. This package works without custom scroll views and slivers. So, you can use this widget in a scaffold widget, that turns your code more simple.
 
 Simple scroll | Snap behavior
 :-----------: | :-----------:
