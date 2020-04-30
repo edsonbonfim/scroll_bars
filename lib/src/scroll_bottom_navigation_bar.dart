@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'scroll_bottom_navigation_bar_controller.dart';
 
 class ScrollBottomNavigationBar extends StatefulWidget {
-  final ScrollBottomNavigationBarController scrollBottomNavigationBarController;
+  final ScrollController controller;
   final List<BottomNavigationBarItem> items;
   final double elevation;
   final BottomNavigationBarType type;
@@ -24,7 +24,7 @@ class ScrollBottomNavigationBar extends StatefulWidget {
 
   ScrollBottomNavigationBar({
     Key key,
-    @required this.scrollBottomNavigationBarController,
+    @required this.controller,
     @required this.items,
     this.elevation = 8.0,
     this.type,
@@ -42,7 +42,7 @@ class ScrollBottomNavigationBar extends StatefulWidget {
     this.unselectedLabelStyle,
     this.showSelectedLabels = true,
     this.showUnselectedLabels,
-  })  : assert(scrollBottomNavigationBarController != null),
+  })  : assert(controller != null),
         super(key: key);
 
   @override
@@ -62,16 +62,16 @@ class _ScrollBottomNavigationBarState extends State<ScrollBottomNavigationBar> {
           Colors.white;
     }
 
-    return StreamBuilder<int>(
-      stream: widget.scrollBottomNavigationBarController.pageStream,
-      builder: _pageBuilder,
+    return ValueListenableBuilder<int>(
+      valueListenable: widget.controller.bottomNavigationBar.tabNotifier,
+      builder: _tab,
     );
   }
 
-  Widget _pageBuilder(BuildContext context, AsyncSnapshot<int> pageSnapshot) {
+  Widget _tab(BuildContext context, int index, Widget child) {
     bottomNavigationBar = BottomNavigationBar(
-      onTap: widget.scrollBottomNavigationBarController.changePage,
-      currentIndex: pageSnapshot?.data ?? 0,
+      onTap: widget.controller.bottomNavigationBar.setTab,
+      currentIndex: index,
       items: widget.items,
       elevation: 0.0,
       type: widget.type,
@@ -89,30 +89,23 @@ class _ScrollBottomNavigationBarState extends State<ScrollBottomNavigationBar> {
       showSelectedLabels: widget.showSelectedLabels,
     );
 
-    return StreamBuilder(
-      stream: widget.scrollBottomNavigationBarController.pinStream,
-      builder: _pinBuilder,
+    return ValueListenableBuilder<bool>(
+      valueListenable: widget.controller.bottomNavigationBar.pinNotifier,
+      builder: _pin,
     );
   }
 
-  Widget _pinBuilder(
-    BuildContext context,
-    AsyncSnapshot<bool> pinSnapshot,
-  ) {
-    if (!pinSnapshot.hasData || pinSnapshot.data) {
-      return _align(1.0);
-    }
-    return StreamBuilder(
-      stream: widget.scrollBottomNavigationBarController.heightFactorStream,
-      builder: _heightFactorBuilder,
+  Widget _pin(BuildContext context, bool isPinned, Widget child) {
+    if (isPinned) return _align(1.0);
+
+    return ValueListenableBuilder<double>(
+      valueListenable: widget.controller.bottomNavigationBar.heightNotifier,
+      builder: _height,
     );
   }
 
-  Widget _heightFactorBuilder(
-    BuildContext context,
-    AsyncSnapshot<double> heightFactorSnapshot,
-  ) {
-    return _align(heightFactorSnapshot?.data ?? 1.0);
+  Widget _height(BuildContext context, double height, Widget child) {
+    return _align(height);
   }
 
   Widget _align(double heightFactor) {
@@ -132,7 +125,7 @@ class _ScrollBottomNavigationBarState extends State<ScrollBottomNavigationBar> {
 
   Widget _decoratedContainer(double heightFactor) {
     return Container(
-      height: widget.scrollBottomNavigationBarController.height,
+      height: widget.controller.bottomNavigationBar.height,
       decoration: BoxDecoration(
         color: backgroundColor,
         gradient: widget.backgroundGradient,
