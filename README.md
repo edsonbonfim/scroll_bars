@@ -19,7 +19,7 @@ This is currently our roadmap, **please feel free to request additions/changes**
 | Snackbar supported  |    ✅     |
 | Gradient background |    ✅     |
 
-> **NOTE:** Try use this package with [scroll_app_bar](https://pub.dev/packages/scroll_app_bar) package to a [better user experience](https://github.com/EdsonOnildoJR/scroll_bars).
+> **NOTE:** Try use this package with [scroll_app_bar](https://pub.dev/packages/scroll_app_bar) package to a better user experience. [See an example](https://github.com/EdsonOnildoJR/scroll_bars).
 
 ## Usage
 
