@@ -35,7 +35,7 @@ First, you need a `ScrollController` instance.
 final controller = ScrollController(); 
 ```
 
-Now, you can use the `ScrollBottomNavigationBar` widget in a `Scaffold` widget, and atach `ScrollController` instance in your scrollable main widget.
+Now, you can use the `ScrollBottomNavigationBar` widget in a `Scaffold` widget, and attach `ScrollController` instance in your scrollable main widget.
 
 > **NOTE:**  Showing only essencial code. See [example](#example) section to a complete implementation.
 
