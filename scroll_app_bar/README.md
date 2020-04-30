@@ -11,7 +11,7 @@ Simple scroll | Snap behavior
 This is currently our roadmap, **please feel free to request additions/changes**.
 
 | Feature             | Progress |
-| ------------------- | :------: |
+| :------------------ | :------: |
 | Simple scroll       |    ✅     |
 | Snap behavior       |    ✅     |
 | Pin/unpin           |    ✅     |
