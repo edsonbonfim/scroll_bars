@@ -17,6 +17,8 @@ This is currently our roadmap, **please feel free to request additions/changes**
 | Pin/unpin           |    ✅     |
 | Gradient background |    ✅     |
 
+> **NOTE:** Try use this package with [scroll_bottom_navigation_bar](https://pub.dev/packages/scroll_bottom_navigation_bar) package to a better user experience. [See an example](https://github.com/EdsonOnildoJR/scroll_bars).
+
 ## Usage
 
 ### Getting started
@@ -31,7 +33,7 @@ First, you need a `ScrollController` instance.
 final controller = ScrollController(); 
 ```
 
-Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and atach `ScrollController` instance in your scrollable main widget.
+Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and attach `ScrollController` instance in your scrollable main widget.
 
 > **_NOTE:_**  Showing only essencial code. See [example](#example) section to a complete implementation.
 
