@@ -1,4 +1,7 @@
-## [1.0.0+1] - April 29, 2020
+## [1.0.0+2] - May 12, 2020
+* Updated documentation
+
+## [1.0.0+1] - April 30, 2020
 * Updated documentation
 
 ## [1.0.0] - April 29, 2020
