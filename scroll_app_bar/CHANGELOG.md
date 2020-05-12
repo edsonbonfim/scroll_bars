@@ -1,3 +1,6 @@
+## [1.0.0+1] - April 29, 2020
+* Updated documentation
+
 ## [1.0.0] - April 29, 2020
 * Fixed snap behavior.
 * Used dart extension on `ScrollController` instaed `ScrollAppBarController`.
