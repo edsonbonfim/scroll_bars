@@ -33,6 +33,10 @@ First, you need a `ScrollController` instance.
 final controller = ScrollController(); 
 ```
 
+This controller is required in order to get the main functionality of this package.
+You need to pass it on `ScrollAppBar`'s controller and inside your `ListView`, also in
+controller property. Without this, you'll get an ordinary App Bar.
+
 Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and attach `ScrollController` instance in your scrollable main widget.
 
 > **_NOTE:_**  Showing only essencial code. See [example](#example) section to a complete implementation.
@@ -42,11 +46,11 @@ Now, you can use the `ScrollAppBar` widget in a `Scaffold` widget, and attach `S
 Widget build(BuildContext context) {
   Scaffold(
     appBar: ScrollAppBar(
-      controller: controller,
+      controller: controller, // Note the controller here
       title: Text("App Bar"),
     ),
     body: ListView.builder(
-      controller: controller,
+      controller: controller, // Controller is also here
       itemBuilder: ...,
     ),
   );
@@ -62,13 +66,13 @@ To enable the snap behavior, you need just wrap the main scrollable widget with 
 Widget build(BuildContext context) {
   Scaffold(
     appBar: ScrollAppBar(
-      controller: controller,
+      controller: controller, // Note the controller here
       title: Text("App Bar"),
     ),
     body: Snap(
       controller: controller.appBar,
       child: ListView.builder(
-        controller: controller,
+        controller: controller, // Controller is also here
         itemBuilder: ...,
       ),
     ),
@@ -108,6 +112,13 @@ controller.appBar.dispose();
 ## Change log
 
 Please see [CHANGELOG](./CHANGELOG.md) for more information on what has changed recently.
+
+## Troubleshooting
+
+### My AppBar doesn't move like intended
+
+Have you assigned the `ScrollController` to the controller property of `ScrollAppBar` and inside
+your `ListView`? This is required in order to get the main functionality.
 
 ## Contributing
 
