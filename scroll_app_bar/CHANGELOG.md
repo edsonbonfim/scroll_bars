@@ -1,3 +1,6 @@
+## [1.0.1] - May 26, 2020
+* Added web support
+
 ## [1.0.0+2] - May 12, 2020
 * Updated documentation
 
