@@ -5,8 +5,21 @@ import 'package:scroll_app_bar/scroll_app_bar.dart';
 
 void main() => runApp(App());
 
-class App extends StatelessWidget {
-  final controller = ScrollController(); // Controller is required
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final controller = ScrollController();
+
+  bool notification;
+
+  @override
+  void initState() {
+    super.initState();
+    notification = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +28,16 @@ class App extends StatelessWidget {
         appBar: ScrollAppBar(
           controller: controller, // Note the controller here
           title: Text("App Bar"),
+          actions: [
+            IconButton(
+              icon: Icon(
+                notification ? Icons.notifications : Icons.notifications_off,
+              ),
+              onPressed: () {
+                setState(() => notification = !notification);
+              },
+            ),
+          ],
         ),
         body: Snap(
           controller: controller.appBar,
@@ -24,6 +47,7 @@ class App extends StatelessWidget {
           ),
         ),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 

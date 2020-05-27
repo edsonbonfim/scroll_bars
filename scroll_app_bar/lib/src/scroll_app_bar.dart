@@ -60,9 +60,7 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
   Color backgroundColor;
 
   @override
-  void initState() {
-    super.initState();
-
+  Widget build(BuildContext context) {
     appBar = AppBar(
       leading: widget.leading,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
@@ -82,10 +80,7 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
       toolbarOpacity: widget.toolbarOpacity,
       shape: widget.shape,
     );
-  }
 
-  @override
-  Widget build(BuildContext context) {
     backgroundColor = widget.backgroundColor ??
         Theme.of(context).appBarTheme.color ??
         Theme.of(context).primaryColor;

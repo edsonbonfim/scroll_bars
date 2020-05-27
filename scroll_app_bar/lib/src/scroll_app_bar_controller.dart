@@ -23,5 +23,6 @@ class _ScrollAppBarController extends ScrollBarsController {
         super(scrollController);
 
   @override
-  double height = kToolbarHeight + (kIsWeb ? 0.0 : Platform.isAndroid ? 24.0 : 0.0);
+  double height =
+      kToolbarHeight + (kIsWeb ? 0.0 : Platform.isAndroid ? 24.0 : 0.0);
 }
