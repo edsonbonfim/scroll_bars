@@ -1,3 +1,6 @@
+## [1.0.2] - May 27, 2020
+* Fix ScrollAppBar cannot update with setState
+
 ## [1.0.1] - May 26, 2020
 * Added web support
 
