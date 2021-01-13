@@ -1,3 +1,6 @@
+## [1.0.3] - Jan 13, 2020
+* Support for transparent appbar (Fix #6). Thanks @ncpleslie and @xJon
+
 ## [1.0.2] - May 27, 2020
 * Fix ScrollAppBar cannot update with setState
 
