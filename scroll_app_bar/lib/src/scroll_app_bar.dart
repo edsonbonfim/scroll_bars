@@ -24,6 +24,7 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
     this.titleSpacing = NavigationToolbar.kMiddleSpacing,
     this.toolbarOpacity = 1.0,
     this.bottomOpacity = 1.0,
+    this.materialType,
   })  : assert(controller != null),
         super(key: key);
 
@@ -46,6 +47,7 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
   final ShapeBorder shape;
   final double bottomOpacity;
   final double toolbarOpacity;
+  final MaterialType materialType;
 
   @override
   _ScrollAppBarState createState() => _ScrollAppBarState();
@@ -118,6 +120,9 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
   Widget _elevation(double heightFactor) {
     return Material(
       elevation: elevation,
+      type: widget.materialType != null
+          ? widget.materialType
+          : MaterialType.canvas,
       child: _decoratedContainer(heightFactor),
     );
   }
