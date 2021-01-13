@@ -1,6 +1,6 @@
 name: scroll_app_bar
 description: Hide or show app bar while scrolling. This package works without custom scroll view and slivers.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/EdsonOnildoJR/scroll_app_bar
 
 environment:

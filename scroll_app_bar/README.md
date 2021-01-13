@@ -16,6 +16,7 @@ This is currently our roadmap, **please feel free to request additions/changes**
 | Snap behavior       |    ✅     |
 | Pin/unpin           |    ✅     |
 | Gradient background |    ✅     |
+| Transparent background |    ✅     |
 
 > **NOTE:** Try use this package with [scroll_bottom_navigation_bar](https://pub.dev/packages/scroll_bottom_navigation_bar) package to a better user experience. [See an example](https://github.com/EdsonOnildoJR/scroll_bars).
 
