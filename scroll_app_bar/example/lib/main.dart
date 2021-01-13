@@ -28,6 +28,10 @@ class _AppState extends State<App> {
         appBar: ScrollAppBar(
           controller: controller, // Note the controller here
           title: Text("App Bar"),
+          backgroundColor:
+              Colors.transparent, // Will make background transparent
+          materialType: MaterialType
+              .transparency, // Needed if you want a transparent background
           actions: [
             IconButton(
               icon: Icon(
