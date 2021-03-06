@@ -1,0 +1,18 @@
+name: scroll_app_bar
+description: Hide or show app bar while scrolling. This package works without custom scroll view and slivers.
+version: 1.0.3
+homepage: https://github.com/EdsonOnildoJR/scroll_app_bar
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scroll_bars_common: ^2.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:

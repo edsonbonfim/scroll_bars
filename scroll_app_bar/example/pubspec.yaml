@@ -1,0 +1,16 @@
+name: example
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.3.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scroll_app_bar:
+    path: ..
+
+flutter:
+  uses-material-design: true
