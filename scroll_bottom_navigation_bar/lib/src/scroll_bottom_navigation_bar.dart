@@ -10,6 +10,7 @@ class ScrollBottomNavigationBar extends StatefulWidget {
   final Color fixedColor;
   final Color backgroundColor;
   final Gradient backgroundGradient;
+  final MaterialType materialType;
   final double iconSize;
   final Color selectedItemColor;
   final Color unselectedItemColor;
@@ -30,6 +31,7 @@ class ScrollBottomNavigationBar extends StatefulWidget {
     this.type,
     this.fixedColor,
     this.backgroundColor = Colors.transparent,
+    this.materialType,
     this.backgroundGradient,
     this.iconSize = 24.0,
     this.selectedItemColor,
@@ -119,6 +121,9 @@ class _ScrollBottomNavigationBarState extends State<ScrollBottomNavigationBar> {
   Widget _elevation(double heightFactor) {
     return Material(
       elevation: widget.elevation,
+      type: widget.materialType != null
+          ? widget.materialType
+          : MaterialType.canvas,
       child: _decoratedContainer(heightFactor),
     );
   }

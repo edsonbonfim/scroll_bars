@@ -1,7 +1,4 @@
-name: example
-description: A new Flutter project.
-
-version: 1.0.0+1
+name: scroll_app_bar_exemples
 
 environment:
   sdk: ">=2.3.0 <3.0.0"

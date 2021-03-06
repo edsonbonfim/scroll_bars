@@ -57,13 +57,86 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _ScrollAppBarState extends State<ScrollAppBar> {
-  Widget appBar;
   double elevation;
   Color backgroundColor;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    elevation =
+        widget.elevation ?? Theme.of(context).appBarTheme.elevation ?? 4.0;
+
+    backgroundColor = widget.backgroundColor ??
+        Theme.of(context).appBarTheme.color ??
+        Theme.of(context).primaryColor;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    appBar = AppBar(
+    return ValueListenableBuilder<bool>(
+      valueListenable: widget.controller.appBar.pinNotifier,
+      builder: _pin,
+      child: _appBar,
+    );
+  }
+
+  Widget _pin(BuildContext context, bool isPinned, Widget child) {
+    if (isPinned) return _align(1.0, child);
+
+    return ValueListenableBuilder<double>(
+      valueListenable: widget.controller.appBar.heightNotifier,
+      builder: _height,
+      child: child,
+    );
+  }
+
+  Widget _height(BuildContext context, double height, Widget child) {
+    return _align(height, child);
+  }
+
+  Widget _align(double heightFactor, Widget child) {
+    return Align(
+      alignment: Alignment(0, 1),
+      heightFactor: heightFactor,
+      child: _elevation(heightFactor, child),
+    );
+  }
+
+  Widget _elevation(double heightFactor, Widget child) {
+    return Material(
+      elevation: elevation,
+      type: widget.materialType != null
+          ? widget.materialType
+          : MaterialType.canvas,
+      child: _decoratedContainer(heightFactor, child),
+    );
+  }
+
+  Widget _decoratedContainer(double heightFactor, Widget child) {
+    return Container(
+      height: widget.controller.appBar.height,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        gradient: widget.backgroundGradient,
+      ),
+      child: _opacity(heightFactor, child),
+    );
+  }
+
+  Widget _opacity(double heightFactor, Widget child) {
+    return Opacity(
+      opacity: Interval(
+        0.5,
+        1.0,
+        curve: Curves.fastOutSlowIn,
+      ).transform(heightFactor),
+      child: child,
+    );
+  }
+
+  Widget get _appBar {
+    return AppBar(
       leading: widget.leading,
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
       title: widget.title,
@@ -81,71 +154,6 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
       bottomOpacity: widget.bottomOpacity,
       toolbarOpacity: widget.toolbarOpacity,
       shape: widget.shape,
-    );
-
-    backgroundColor = widget.backgroundColor ??
-        Theme.of(context).appBarTheme.color ??
-        Theme.of(context).primaryColor;
-
-    elevation =
-        widget.elevation ?? Theme.of(context).appBarTheme.elevation ?? 4.0;
-
-    return ValueListenableBuilder<bool>(
-      valueListenable: widget.controller.appBar.pinNotifier,
-      builder: _pin,
-    );
-  }
-
-  Widget _pin(BuildContext context, bool isPinned, Widget child) {
-    if (isPinned) return _align(1.0);
-
-    return ValueListenableBuilder<double>(
-      valueListenable: widget.controller.appBar.heightNotifier,
-      builder: _height,
-    );
-  }
-
-  Widget _height(BuildContext context, double height, Widget child) {
-    return _align(height);
-  }
-
-  Widget _align(double heightFactor) {
-    return Align(
-      alignment: Alignment(0, 1),
-      heightFactor: heightFactor,
-      child: _elevation(heightFactor),
-    );
-  }
-
-  Widget _elevation(double heightFactor) {
-    return Material(
-      elevation: elevation,
-      type: widget.materialType != null
-          ? widget.materialType
-          : MaterialType.canvas,
-      child: _decoratedContainer(heightFactor),
-    );
-  }
-
-  Widget _decoratedContainer(double heightFactor) {
-    return Container(
-      height: widget.controller.appBar.height,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        gradient: widget.backgroundGradient,
-      ),
-      child: _opacity(heightFactor),
-    );
-  }
-
-  Widget _opacity(double heightFactor) {
-    return Opacity(
-      opacity: Interval(
-        0.5,
-        1.0,
-        curve: Curves.fastOutSlowIn,
-      ).transform(heightFactor),
-      child: appBar,
     );
   }
 }

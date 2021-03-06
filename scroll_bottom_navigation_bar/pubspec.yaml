@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  scroll_bars_common: ^2.0.0
+  scroll_bars_common:
+    path: ../scroll_bars_common
 
 dev_dependencies:
   flutter_test:
