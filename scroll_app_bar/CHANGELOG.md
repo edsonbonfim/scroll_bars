@@ -1,3 +1,6 @@
+## [2.0.0] - July 11, 2021
+* Null safety support.
+
 ## [1.0.3] - Jan 13, 2020
 * Support for transparent appbar (Fix #6). Thanks @ncpleslie and @xJon
 

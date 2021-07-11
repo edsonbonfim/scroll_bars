@@ -1,75 +1,128 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'scroll_app_bar_controller.dart';
 
 class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
-  ScrollAppBar({
-    Key key,
-    @required this.controller,
-    this.leading,
-    this.automaticallyImplyLeading = true,
-    this.title,
-    this.actions,
-    this.flexibleSpace,
-    this.bottom,
-    this.elevation,
-    this.shape,
-    this.backgroundColor,
-    this.backgroundGradient,
-    this.brightness,
-    this.iconTheme,
-    this.actionsIconTheme,
-    this.textTheme,
-    this.centerTitle,
-    this.titleSpacing = NavigationToolbar.kMiddleSpacing,
-    this.toolbarOpacity = 1.0,
-    this.bottomOpacity = 1.0,
-    this.materialType,
-  })  : assert(controller != null),
+  ScrollAppBar(
+      {Key? key,
+      required this.controller,
+      this.leading,
+      this.automaticallyImplyLeading = true,
+      this.title,
+      this.actions,
+      this.flexibleSpace,
+      this.bottom,
+      this.elevation,
+      this.shadowColor,
+      this.shape,
+      this.backgroundColor,
+      this.foregroundColor,
+      this.backgroundGradient,
+      this.brightness,
+      this.iconTheme,
+      this.actionsIconTheme,
+      this.textTheme,
+      this.primary = true,
+      this.centerTitle,
+      this.excludeHeaderSemantics = false,
+      this.titleSpacing,
+      this.toolbarOpacity = 1.0,
+      this.bottomOpacity = 1.0,
+      this.toolbarHeight,
+      this.leadingWidth,
+      this.backwardsCompatibility,
+      this.toolbarTextStyle,
+      this.titleTextStyle,
+      this.systemOverlayStyle,
+      this.materialType})
+      : assert(elevation == null || elevation >= 0.0),
+        preferredSize = Size.fromHeight(toolbarHeight ??
+            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
         super(key: key);
 
   final ScrollController controller;
-  final Widget leading;
+
+  final Widget? leading;
+
   final bool automaticallyImplyLeading;
-  final Widget title;
-  final List<Widget> actions;
-  final Widget flexibleSpace;
-  final PreferredSizeWidget bottom;
-  final double elevation;
-  final Color backgroundColor;
-  final Gradient backgroundGradient;
-  final Brightness brightness;
-  final IconThemeData iconTheme;
-  final IconThemeData actionsIconTheme;
-  final TextTheme textTheme;
-  final bool centerTitle;
-  final double titleSpacing;
-  final ShapeBorder shape;
-  final double bottomOpacity;
+
+  final Widget? title;
+
+  final List<Widget>? actions;
+
+  final Widget? flexibleSpace;
+
+  final PreferredSizeWidget? bottom;
+
+  final double? elevation;
+
+  final Color? shadowColor;
+
+  final ShapeBorder? shape;
+
+  final Color? backgroundColor;
+
+  final Gradient? backgroundGradient;
+
+  final Color? foregroundColor;
+
+  final Brightness? brightness;
+
+  final IconThemeData? iconTheme;
+
+  final IconThemeData? actionsIconTheme;
+
+  final TextTheme? textTheme;
+
+  final bool primary;
+
+  final bool? centerTitle;
+
+  final bool excludeHeaderSemantics;
+
+  final double? titleSpacing;
+
   final double toolbarOpacity;
-  final MaterialType materialType;
+
+  final double bottomOpacity;
+
+  @override
+  final Size preferredSize;
+
+  final double? toolbarHeight;
+
+  final double? leadingWidth;
+
+  final bool? backwardsCompatibility;
+
+  final TextStyle? toolbarTextStyle;
+
+  final TextStyle? titleTextStyle;
+
+  final SystemUiOverlayStyle? systemOverlayStyle;
+
+  final MaterialType? materialType;
 
   @override
   _ScrollAppBarState createState() => _ScrollAppBarState();
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
 class _ScrollAppBarState extends State<ScrollAppBar> {
-  double elevation;
-  Color backgroundColor;
+  double? elevation;
+
+  Color? backgroundColor;
+
+  @override
+  void didUpdateWidget(covariant ScrollAppBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _init();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    elevation =
-        widget.elevation ?? Theme.of(context).appBarTheme.elevation ?? 4.0;
-
-    backgroundColor = widget.backgroundColor ??
-        Theme.of(context).appBarTheme.color ??
-        Theme.of(context).primaryColor;
+    _init();
   }
 
   @override
@@ -81,7 +134,29 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
     );
   }
 
-  Widget _pin(BuildContext context, bool isPinned, Widget child) {
+  void _init() {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    final AppBarTheme appBarTheme = AppBarTheme.of(context);
+
+    final bool backwardsCompatibility = widget.backwardsCompatibility ??
+        appBarTheme.backwardsCompatibility ??
+        true;
+
+    elevation = widget.elevation ?? appBarTheme.elevation ?? 4.0;
+
+    backgroundColor = backwardsCompatibility
+        ? widget.backgroundColor ??
+            appBarTheme.backgroundColor ??
+            theme.primaryColor
+        : widget.backgroundColor ??
+            appBarTheme.backgroundColor ??
+            (colorScheme.brightness == Brightness.dark
+                ? colorScheme.surface
+                : colorScheme.primary);
+  }
+
+  Widget _pin(BuildContext context, bool isPinned, Widget? child) {
     if (isPinned) return _align(1.0, child);
 
     return ValueListenableBuilder<double>(
@@ -91,31 +166,30 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
     );
   }
 
-  Widget _height(BuildContext context, double height, Widget child) {
+  Widget _height(BuildContext context, double height, Widget? child) {
     return _align(height, child);
   }
 
-  Widget _align(double heightFactor, Widget child) {
+  Widget _align(double heightFactor, Widget? child) {
     return Align(
-      alignment: Alignment(0, 1),
+      alignment: const Alignment(0, 1),
       heightFactor: heightFactor,
       child: _elevation(heightFactor, child),
     );
   }
 
-  Widget _elevation(double heightFactor, Widget child) {
+  Widget _elevation(double heightFactor, Widget? child) {
     return Material(
-      elevation: elevation,
+      elevation: elevation ?? 4.0,
       type: widget.materialType != null
-          ? widget.materialType
+          ? widget.materialType!
           : MaterialType.canvas,
       child: _decoratedContainer(heightFactor, child),
     );
   }
 
-  Widget _decoratedContainer(double heightFactor, Widget child) {
+  Widget _decoratedContainer(double heightFactor, Widget? child) {
     return Container(
-      height: widget.controller.appBar.height,
       decoration: BoxDecoration(
         color: backgroundColor,
         gradient: widget.backgroundGradient,
@@ -124,9 +198,9 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
     );
   }
 
-  Widget _opacity(double heightFactor, Widget child) {
+  Widget _opacity(double heightFactor, Widget? child) {
     return Opacity(
-      opacity: Interval(
+      opacity: const Interval(
         0.5,
         1.0,
         curve: Curves.fastOutSlowIn,
@@ -144,16 +218,26 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
       flexibleSpace: widget.flexibleSpace,
       bottom: widget.bottom,
       elevation: 0.0,
+      shadowColor: widget.shadowColor,
+      shape: widget.shape,
       backgroundColor: Colors.transparent,
+      foregroundColor: widget.foregroundColor,
       brightness: widget.brightness,
       iconTheme: widget.iconTheme,
       actionsIconTheme: widget.actionsIconTheme,
       textTheme: widget.textTheme,
+      primary: widget.primary,
       centerTitle: widget.centerTitle,
+      excludeHeaderSemantics: widget.excludeHeaderSemantics,
       titleSpacing: widget.titleSpacing,
-      bottomOpacity: widget.bottomOpacity,
       toolbarOpacity: widget.toolbarOpacity,
-      shape: widget.shape,
+      bottomOpacity: widget.bottomOpacity,
+      toolbarHeight: widget.toolbarHeight,
+      leadingWidth: widget.leadingWidth,
+      backwardsCompatibility: widget.backwardsCompatibility,
+      toolbarTextStyle: widget.toolbarTextStyle,
+      titleTextStyle: widget.titleTextStyle,
+      systemOverlayStyle: widget.systemOverlayStyle,
     );
   }
 }

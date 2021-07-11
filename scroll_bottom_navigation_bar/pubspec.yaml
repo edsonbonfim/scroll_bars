@@ -1,19 +1,16 @@
 name: scroll_bottom_navigation_bar
 description: This package allow hide or show bottom navigation bar while scrolling
-version: 3.0.0
+version: 4.0.0
 homepage: https://github.com/EdsonOnildoJR/scroll_bottom_navigation_bar
+issue_tracker: https://github.com/edsonbonfim/scroll_bars/issues
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  scroll_bars_common:
-    path: ../scroll_bars_common
+  scroll_bars_common: ^3.0.0
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-flutter:
+  flutter_lints: ^1.0.4

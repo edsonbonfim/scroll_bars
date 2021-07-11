@@ -1,3 +1,6 @@
+## [3.0.0] - July 11, 2021
+* Null safety support.
+
 ## [2.0.0] - April 29, 2020
 * Added snap widget.
 * Fix some issues.

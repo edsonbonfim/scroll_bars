@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
 
-class TransparentPage extends StatefulWidget {
-  @override
-  _TransparentPageState createState() => _TransparentPageState();
-}
+class TransparentPage extends StatelessWidget {
+  TransparentPage({Key? key}) : super(key: key);
 
-class _TransparentPageState extends State<TransparentPage> {
-  ScrollController controller;
+  final controller = ScrollController();
 
   static const _items = <BottomNavigationBarItem>[
     BottomNavigationBarItem(
@@ -21,45 +18,23 @@ class _TransparentPageState extends State<TransparentPage> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    controller = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    controller.bottomNavigationBar.dispose();
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Snap scroll")),
+      appBar: AppBar(title: const Text("Transparent Background")),
       body: ValueListenableBuilder<int>(
         valueListenable: controller.bottomNavigationBar.tabNotifier,
-        builder: (context, value, child) => Snap(
-          key: PageStorageKey(value),
-          controller: controller.bottomNavigationBar,
-          child: ListView.builder(
-            controller: controller, // Controller is also here
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: Text('$index'),
-                ),
-              );
-            },
-          ),
+        child: SizedBox(height: MediaQuery.of(context).size.height * 2),
+        builder: (context, pageIndex, child) => ListView(
+          key: PageStorageKey(pageIndex),
+          controller: controller, // Note the controller here
+          children: [child!],
         ),
       ),
       bottomNavigationBar: ScrollBottomNavigationBar(
-        controller: controller, // Note the controller here
+        controller: controller, // Controller is also here
         items: _items,
-        backgroundColor: Colors.transparent,
         materialType: MaterialType.transparency,
+        backgroundColor: Colors.transparent,
       ),
     );
   }

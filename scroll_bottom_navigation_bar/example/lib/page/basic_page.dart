@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_bottom_navigation_bar/scroll_bottom_navigation_bar.dart';
 
-class GradientPage extends StatelessWidget {
-  GradientPage({Key? key}) : super(key: key);
+class BasicPage extends StatelessWidget {
+  BasicPage({Key? key}) : super(key: key);
 
   final controller = ScrollController();
 
@@ -20,7 +20,7 @@ class GradientPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Gradient Background")),
+      appBar: AppBar(title: const Text("Basic")),
       body: ValueListenableBuilder<int>(
         valueListenable: controller.bottomNavigationBar.tabNotifier,
         child: SizedBox(height: MediaQuery.of(context).size.height * 2),
@@ -33,15 +33,6 @@ class GradientPage extends StatelessWidget {
       bottomNavigationBar: ScrollBottomNavigationBar(
         controller: controller, // Controller is also here
         items: _items,
-        backgroundGradient: const LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            Colors.red,
-            Colors.green,
-            Colors.blue,
-          ],
-        ),
       ),
     );
   }

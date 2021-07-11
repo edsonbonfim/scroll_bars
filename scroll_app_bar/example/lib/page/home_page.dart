@@ -1,74 +1,54 @@
 import 'package:flutter/material.dart';
 
 import 'pin_unpin_page.dart';
-import 'simple_scroll_page.dart';
-import 'snap_scroll_page.dart';
+import 'basic_page.dart';
+import 'snap_page.dart';
 import 'gradient_page.dart';
 import 'transparent_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Scroll app bar"),
+        title: const Text("Scroll App Bar"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _button(
-            text: "Simple scroll",
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return SimpleScrollPage();
-              }));
-            },
-          ),
-          _button(
-            text: "Snap behavior",
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return SnapScrollPage();
-              }));
-            },
-          ),
-          _button(
-            text: "Pin/unpin",
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return PinUnpinPage();
-              }));
-            },
-          ),
-          _button(
-            text: "Gradient background",
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return GradientPage();
-              }));
-            },
-          ),
-          _button(
-            text: "Transparent Background",
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return TransparentPage();
-              }));
-            },
-          ),
+          _button("Basic", () => BasicPage()),
+          _button("Snap", () => SnapPage()),
+          _button("Pin/unpin", () => PinUnpinPage()),
+          _button("Gradient Background", () => GradientPage()),
+          _button("Transparent Background", () => TransparentPage()),
         ],
       ),
     );
   }
 
-  _button({String text, VoidCallback onPressed}) {
+  _button(text, Widget Function() onPressed) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
       child: Row(
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: onPressed,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return onPressed.call();
+                    },
+                  ),
+                );
+              },
               child: Text(text),
             ),
           ),

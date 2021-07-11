@@ -1,49 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:scroll_app_bar/scroll_app_bar.dart';
 
-class TransparentPage extends StatefulWidget {
-  @override
-  _TransparentPageState createState() => _TransparentPageState();
-}
+class TransparentPage extends StatelessWidget {
+  TransparentPage({Key? key}) : super(key: key);
 
-class _TransparentPageState extends State<TransparentPage> {
-  ScrollController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    controller.appBar.dispose();
-    controller.dispose();
-    super.dispose();
-  }
+  final controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ScrollAppBar(
         controller: controller, // Note the controller here
-        title: Text("Snap"),
+        iconTheme: ThemeData.light().iconTheme,
+        title: const Text(
+          "Transparent Background",
+          style: TextStyle(color: Colors.black),
+        ),
         materialType: MaterialType.transparency,
         backgroundColor: Colors.transparent,
       ),
-      body: Snap(
-        controller: controller.appBar,
-        child: ListView.builder(
-          controller: controller, // Controller is also here
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Center(
-                child: Text('$index'),
-              ),
-            );
-          },
-        ),
+      body: ListView(
+        controller: controller, // Controller is also here
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 2,
+          ),
+        ],
       ),
     );
   }

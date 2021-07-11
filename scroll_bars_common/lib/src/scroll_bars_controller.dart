@@ -6,12 +6,10 @@ class Snap extends StatelessWidget {
   final Widget child;
 
   const Snap({
-    Key key,
-    this.controller,
-    @required this.child,
-  })  : assert(controller != null),
-        assert(child != null),
-        super(key: key);
+    Key? key,
+    required this.controller,
+    required this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,7 @@ class Snap extends StatelessWidget {
 
       controller.scrollController.animateTo(
         controller.scrollController.offset + offset,
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         curve: Curves.linear,
       );
     }
@@ -42,8 +40,7 @@ class Snap extends StatelessWidget {
 }
 
 abstract class ScrollBarsController {
-  ScrollBarsController(this.scrollController)
-      : assert(scrollController != null) {
+  ScrollBarsController(this.scrollController) {
     scrollController.addListener(_scrollListener);
   }
 

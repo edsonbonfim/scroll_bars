@@ -1,13 +1,17 @@
-name: scroll_bottom_navigation_bar_examples
+name: scroll_bottom_navigation_bar_example
+publish_to: none
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   scroll_bottom_navigation_bar:
     path: ..
+
+dev_dependencies: 
+  flutter_lints: ^1.0.4
 
 flutter:
   uses-material-design: true
