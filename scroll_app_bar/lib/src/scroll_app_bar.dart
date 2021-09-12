@@ -7,6 +7,7 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
   ScrollAppBar(
       {Key? key,
       required this.controller,
+      this.fade = true,
       this.leading,
       this.automaticallyImplyLeading = true,
       this.title,
@@ -37,11 +38,12 @@ class ScrollAppBar extends StatefulWidget with PreferredSizeWidget {
       this.systemOverlayStyle,
       this.materialType})
       : assert(elevation == null || elevation >= 0.0),
-        preferredSize = Size.fromHeight(toolbarHeight ??
-            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
+        preferredSize = Size.fromHeight(toolbarHeight ?? kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
         super(key: key);
 
   final ScrollController controller;
+
+  final bool fade;
 
   final Widget? leading;
 
@@ -139,21 +141,15 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
     final ColorScheme colorScheme = theme.colorScheme;
     final AppBarTheme appBarTheme = AppBarTheme.of(context);
 
-    final bool backwardsCompatibility = widget.backwardsCompatibility ??
-        appBarTheme.backwardsCompatibility ??
-        true;
+    final bool backwardsCompatibility = widget.backwardsCompatibility ?? appBarTheme.backwardsCompatibility ?? true;
 
     elevation = widget.elevation ?? appBarTheme.elevation ?? 4.0;
 
     backgroundColor = backwardsCompatibility
-        ? widget.backgroundColor ??
-            appBarTheme.backgroundColor ??
-            theme.primaryColor
+        ? widget.backgroundColor ?? appBarTheme.backgroundColor ?? theme.primaryColor
         : widget.backgroundColor ??
             appBarTheme.backgroundColor ??
-            (colorScheme.brightness == Brightness.dark
-                ? colorScheme.surface
-                : colorScheme.primary);
+            (colorScheme.brightness == Brightness.dark ? colorScheme.surface : colorScheme.primary);
   }
 
   Widget _pin(BuildContext context, bool isPinned, Widget? child) {
@@ -181,9 +177,7 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
   Widget _elevation(double heightFactor, Widget? child) {
     return Material(
       elevation: elevation ?? 4.0,
-      type: widget.materialType != null
-          ? widget.materialType!
-          : MaterialType.canvas,
+      type: widget.materialType != null ? widget.materialType! : MaterialType.canvas,
       child: _decoratedContainer(heightFactor, child),
     );
   }
@@ -194,7 +188,7 @@ class _ScrollAppBarState extends State<ScrollAppBar> {
         color: backgroundColor,
         gradient: widget.backgroundGradient,
       ),
-      child: _opacity(heightFactor, child),
+      child: widget.fade ? _opacity(heightFactor, child) : child,
     );
   }
 
